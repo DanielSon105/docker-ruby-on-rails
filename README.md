@@ -2,7 +2,7 @@
 
 ## Installation
 
-- Change application name, Ruby and RoR versions in `./bootstrap.sh` if needed (if you will change application name, edit `Dockerfile`'s line 56 too).
+- Change application name, Ruby and RoR versions in `./bootstrap.sh` if needed (if you will change application name, edit `Dockerfile`'s lines 49, 60 and 56 too).
 - Bootstrap an application:
 
   ```sh
