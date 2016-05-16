@@ -4,9 +4,8 @@
 
 - Change Ruby and RoR versions in `./bootstrap.sh` if needed.
 - Change application name in `./bootstrap.sh` if needed, also change it in the following files:
-  - https://github.com/mvoropaiev/docker-ruby-on-rails/blob/master/docker-compose.yml#L11
-  - https://github.com/mvoropaiev/docker-ruby-on-rails/blob/master/Dockerfile#L49-L50
-  - https://github.com/mvoropaiev/docker-ruby-on-rails/blob/master/Dockerfile#L56
+  - docker-compose.yml line [11](docker-compose.yml#L11)
+  - Dockerfile: lines [49, 50](Dockerfile#L49-L50) and [56](Dockerfile#L56)
 - Bootstrap an application:
 
   ```sh
@@ -28,7 +27,7 @@
 
 ## Updating gems
 
-To update gems after changing `Gemfile` content, simply restart application:
+To update gems after changing `Gemfile` content, simply restart application by running:
 
 ```sh
 docker-compose restart app
