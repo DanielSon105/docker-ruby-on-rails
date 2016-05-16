@@ -34,7 +34,7 @@ case $1 in
         docker build --tag $image_name_dev .
         ;;
       prod )
-        docker build --tag $image_name_prod --file prod.Dockerfile .
+        docker build --tag $image_name_prod --file Dockerfile.prod .
         ;;
       * )
         echo "Usage: $0 build dev|prod"
