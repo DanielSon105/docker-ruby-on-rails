@@ -5,7 +5,10 @@ services:
   app:
     image: docker-ruby-on-rails-dev
     ports:
+      # puma
       - 9292:9292
+      # rails server
+      - 3000:3000
     volumes:
       # application source code:
       - ./webapp:/usr/src/app
