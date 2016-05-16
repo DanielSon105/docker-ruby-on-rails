@@ -31,10 +31,16 @@
   ./bootstrap.sh gemfile
   ```
 
-- Build and start application inside docker using docker-compose:
+- Start application inside docker using docker-compose:
 
   ```sh
   docker-compose up
+  ```
+
+- When ready to be shipped, build a production image (this will install all the gems and copy your application into the image):
+
+  ```sh
+  ./bootstrap.sh build prod
   ```
 
 ## Updating gems
