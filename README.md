@@ -11,16 +11,16 @@
   - **docker-compose.yml**: line [11](docker-compose.yml#L11)
   - **Dockerfile**: lines [49, 50](Dockerfile#L49-L50), [56](Dockerfile#L56) and [62](Dockerfile#L62)
 
+- Build base dev image:
+
+  ```sh
+  ./bootstrap.sh build dev
+  ```
+
 - Bootstrap an application:
 
   ```sh
   ./bootstrap.sh setup
-  ```
-
-- Build dev image:
-
-  ```sh
-  ./bootstrap.sh build dev
   ```
 
 - Add required gems to `./webapp/Gemfile` if desired (like `gem 'puma'` to work with default cmd).
