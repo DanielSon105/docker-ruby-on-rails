@@ -2,16 +2,13 @@
 
 ## Installation
 
-- Change Ruby and Rails versions in `./bootstrap.sh` if needed, also change it in the following file:
+- Change application name (`webapp` by default), Ruby and Rails versions in `./bootstrap.sh` if needed, also change it in the following file:
 
-  - **Dockerfile**: line [2](Dockerfile#L2) for Ruby version and line [39](Dockerfile#L39) for Rails version.
+  - **docker-compose.yml**: [line 6](Dockerfile#L6) for Ruby version and [line 14](Dockerfile#L14) for application name.
+  - **Dockerfile**: [line 2](Dockerfile#L2) for Ruby version.
+  - **Dockerfile.prod**: [lines 5, 6](Dockerfile#L5-L6), and [line 12](Dockerfile#L12) for application name.
 
-- Change application name in `./bootstrap.sh` if needed, also change it in the following files:
-
-  - **docker-compose.yml**: line [11](docker-compose.yml#L11)
-  - **Dockerfile**: lines [49, 50](Dockerfile#L49-L50), [56](Dockerfile#L56) and [62](Dockerfile#L62)
-
-- Build base dev image:
+- Build base development image (which only includes Ruby and some useful tools):
 
   ```sh
   ./bootstrap.sh build dev

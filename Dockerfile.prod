@@ -1,5 +1,5 @@
 # base image
-FROM docker-ruby-on-rails-dev-2.3.1
+FROM docker-ruby-on-rails-dev:2.3.1
 
 # install required gems
 COPY ./webapp/Gemfile .

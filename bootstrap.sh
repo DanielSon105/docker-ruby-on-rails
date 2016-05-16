@@ -5,8 +5,8 @@ ruby_version='2.3.1'
 rails_version='4.2.6'
 app_name='webapp'
 
-image_name_dev="docker-ruby-on-rails-dev-$ruby_version"
-image_name_prod="docker-ruby-on-rails-prod-$ruby_version"
+image_name_dev="docker-ruby-on-rails-dev:$ruby_version"
+image_name_prod="docker-ruby-on-rails-prod:$ruby_version"
 
 case $1 in
   setup )
