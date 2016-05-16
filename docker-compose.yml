@@ -3,14 +3,14 @@ version: '2'
 services:
 
   app:
-    build: .
+    image: docker-ruby-on-rails-dev
     ports:
       - 9292:9292
     volumes:
       # application source code:
       - ./webapp:/usr/src/app
       # bundle cache:
-      - ./.bundle:/usr/local/bundle-cache
+      - ./.bundle:/usr/local/bundle
     environment:
       RAILS_ENV: development
 

@@ -1,7 +1,9 @@
 /.bundle
 /.db
 /.db-init
+/.git
 /bootstrap.sh
 /docker-compose.yml
 /Dockerfile
+/prod.Dockerfile
 /README.md

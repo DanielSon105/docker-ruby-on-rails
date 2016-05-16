@@ -35,26 +35,6 @@ RUN set -ex \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-# install rails
-ENV RAILS_VERSION '4.2.6'
-RUN set -ex \
-    && gem install rails --version "$RAILS_VERSION"
-
-# install puma
-ENV PUMA_VERSION '3.4.0'
-RUN set -ex \
-    && gem install puma --version "$PUMA_VERSION"
-
-# install required gems
-COPY ./webapp/Gemfile .
-COPY ./webapp/Gemfile.lock .
-RUN set -ex \
-    && bundle config --global frozen 1 \
-    && bundle install
-
-# copy application code
-COPY ./webapp .
-
 # expose puma's port
 EXPOSE 9292
 

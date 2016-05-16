@@ -5,6 +5,9 @@ ruby_version='2.3.1'
 rails_version='4.2.6'
 app_name='webapp'
 
+image_name_dev='docker-ruby-on-rails-dev'
+image_name_prod='docker-ruby-on-rails-prod'
+
 case $1 in
   setup )
     docker run \
@@ -19,14 +22,26 @@ case $1 in
   gemfile )
     docker run \
       --rm \
-      --env BUNDLE_PATH='/usr/local/bundle-cache' \
       --volume "$PWD/$app_name":/usr/src/app \
-      --volume "$PWD/.bundle":/usr/local/bundle-cache \
+      --volume "$PWD/.bundle":/usr/local/bundle \
       -w /usr/src/app \
       ruby:$ruby_version \
         bash -c "bundle check || bundle install"
     ;;
+  build )
+    case $2 in
+      dev )
+        docker build --tag $image_name_dev .
+        ;;
+      prod )
+        docker build --tag $image_name_prod --file prod.Dockerfile .
+        ;;
+      * )
+        echo "Usage: $0 build dev|prod"
+        ;;
+    esac
+    ;;
   * )
-    echo "Usage: $0 setup|gemfile"
+    echo "Usage: $0 setup|gemfile|build"
     ;;
 esac

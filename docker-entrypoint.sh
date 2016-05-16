@@ -23,7 +23,6 @@ fi
 case $RAILS_ENV in
   development )
     check_user_for .
-    export BUNDLE_PATH='/usr/local/bundle-cache'
     bundle config --global frozen 0
     bundle check || bundle install
     ;;
