@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  app:
+    build: .
+    ports:
+      - 9292:9292
+    volumes:
+      # application source code:
+      - ./:/usr/src/app
+      # bundle cache:
+      - ./.bundle:/usr/local/bundle-cache
+    environment:
+      RAILS_ENV: development
+
+  db:
+    image: postgres:9.5.2
+    volumes:
+      - ./.db:/var/lib/postgresql
+      - ./.db-init:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
