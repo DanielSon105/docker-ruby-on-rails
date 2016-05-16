@@ -36,5 +36,8 @@
 To update gems after changing `Gemfile` content, simply restart application by running:
 
 ```sh
+# if the app is running in background (e.g. docker-compose up -d app):
 docker-compose restart app
+# if the app is running in foreground, then CTR+C and start it again:
+docker-compose up app
 ```
