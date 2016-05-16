@@ -2,7 +2,11 @@
 
 ## Installation
 
-- Change application name, Ruby and RoR versions in `./bootstrap.sh` if needed (if you will change application name, edit `Dockerfile`'s lines 49, 60 and 56 too).
+- Change Ruby and RoR versions in `./bootstrap.sh` if needed.
+- Change application name in `./bootstrap.sh` if needed, also change it in the following files:
+  - https://github.com/mvoropaiev/docker-ruby-on-rails/blob/master/docker-compose.yml#L11
+  - https://github.com/mvoropaiev/docker-ruby-on-rails/blob/master/Dockerfile#L49-L50
+  - https://github.com/mvoropaiev/docker-ruby-on-rails/blob/master/Dockerfile#L56
 - Bootstrap an application:
 
   ```sh
