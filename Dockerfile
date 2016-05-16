@@ -59,5 +59,6 @@ COPY ./webapp .
 EXPOSE 9292
 
 # entrypoint / default command
-ENTRYPOINT ["./docker-entrypoint.sh"]
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["puma", "-b", "tcp://0.0.0.0:9292", "--log-requests"]
