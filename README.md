@@ -17,6 +17,12 @@
   ./bootstrap.sh setup
   ```
 
+- Build dev image:
+
+  ```sh
+  ./bootstrap.sh build dev
+  ```
+
 - Add required gems to `./webapp/Gemfile` if desired.
 
 - Generate `Gemfile.lock` (required to build Docker image):
@@ -25,10 +31,10 @@
   ./bootstrap.sh gemfile
   ```
 
-- Build and start application inside docker using docker-compose (it might take a while, since it will re-download all the gems inside the Docker image so in the future we can just ship it as it is):
+- Build and start application inside docker using docker-compose:
 
   ```sh
-  docker-compose up --build
+  docker-compose up
   ```
 
 ## Updating gems
