@@ -2,10 +2,15 @@
 
 ## Installation
 
-- Change Ruby and RoR versions in `./bootstrap.sh` if needed.
+- Change Ruby and RoR versions in `./bootstrap.sh` if needed, also change it in the following file:
+
+  - **Dockerfile**: line [2](Dockerfile#L2) for Ruby version and line [39](Dockerfile#L39) for RoR version.
+
 - Change application name in `./bootstrap.sh` if needed, also change it in the following files:
-  - docker-compose.yml line [11](docker-compose.yml#L11)
-  - Dockerfile: lines [49, 50](Dockerfile#L49-L50) and [56](Dockerfile#L56)
+
+  - **docker-compose.yml**: line [11](docker-compose.yml#L11)
+  - **Dockerfile**: lines [49, 50](Dockerfile#L49-L50) and [56](Dockerfile#L56)
+
 - Bootstrap an application:
 
   ```sh
@@ -13,6 +18,7 @@
   ```
 
 - Add required gems to `./webapp/Gemfile` if desired.
+
 - Generate `Gemfile.lock` (required to build Docker image):
 
   ```sh
