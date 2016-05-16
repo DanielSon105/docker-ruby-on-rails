@@ -9,7 +9,7 @@
 - Change application name in `./bootstrap.sh` if needed, also change it in the following files:
 
   - **docker-compose.yml**: line [11](docker-compose.yml#L11)
-  - **Dockerfile**: lines [49, 50](Dockerfile#L49-L50) and [56](Dockerfile#L56)
+  - **Dockerfile**: lines [49, 50](Dockerfile#L49-L50), [56](Dockerfile#L56) and [62](Dockerfile#L62)
 
 - Bootstrap an application:
 
