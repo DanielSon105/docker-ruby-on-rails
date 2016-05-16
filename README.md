@@ -25,7 +25,7 @@
   ./bootstrap.sh gemfile
   ```
 
-- Build and start application inside docker (using docker-compose):
+- Build and start application inside docker using docker-compose (it might take a while, since it will re-download all the gems inside the Docker image so in the future we can just ship it as it is):
 
   ```sh
   docker-compose up --build
