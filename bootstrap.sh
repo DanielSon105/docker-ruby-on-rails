@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# configration:
+# configuration:
 ruby_version='2.3.1'
 rails_version='4.2.6'
 app_name='webapp'
