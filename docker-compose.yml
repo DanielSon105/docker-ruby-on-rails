@@ -17,14 +17,15 @@ services:
     environment:
       RAILS_ENV: development
 
-  db:
-    image: postgres:9.5.2
-    volumes:
-      - ./.db:/var/lib/postgresql
-      - ./.db-init:/docker-entrypoint-initdb.d
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_DB: test_db
-      POSTGRES_USER: test_user
-      POSTGRES_PASSWORD: test_password
+  # comment out if you are planning to use database:
+  # db:
+  #   image: postgres:9.5.2
+  #   volumes:
+  #     - ./.db:/var/lib/postgresql
+  #     - ./.db-init:/docker-entrypoint-initdb.d
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_DB: test_db
+  #     POSTGRES_USER: test_user
+  #     POSTGRES_PASSWORD: test_password
