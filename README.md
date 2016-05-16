@@ -4,45 +4,33 @@
 
 - Change application name (`webapp` by default), Ruby and Rails versions in `./bootstrap.sh` if needed, also change it in the following file:
 
-  - **docker-compose.yml**: [line 6](docker-compose.yml#L6) for Ruby version and [line 14](docker-compose.yml#L14) for application name.
+  - **docker-compose.yml**: [line 14](docker-compose.yml#L14) for application name.
   - **Dockerfile**: [line 2](Dockerfile#L2) for Ruby version.
   - **Dockerfile.prod**: [lines 5, 6](Dockerfile.prod#L5-L6), and [line 12](Dockerfile.prod#L12) for application name.
-
-- Build base development image (which only includes Ruby and some useful tools):
-
-  ```sh
-  ./bootstrap.sh build dev
-  ```
 
 - Bootstrap an application:
 
   ```sh
-  ./bootstrap.sh setup
+  ./bootstrap.sh
   ```
 
 - Add required gems to `./webapp/Gemfile` if desired (like `gem 'puma'` to work with default cmd).
 
-- Generate `Gemfile.lock` (required to build Docker image):
+- Build and start application inside docker using docker-compose (on the first launch it will install all the gems into a shared folder, so it might take a while):
 
   ```sh
-  ./bootstrap.sh gemfile
-  ```
-
-- Start application inside docker using docker-compose:
-
-  ```sh
-  docker-compose up
+  docker-compose up --build app
   ```
 
 - When ready to be shipped, build a production image (this will install all the gems and copy your application into the image):
 
   ```sh
-  ./bootstrap.sh build prod
+  docker build --tag "repo/name:veresion" --file Dockerfile.prod .
   ```
 
 ## Updating gems
 
-To update gems after changing `Gemfile` content, simply restart application by running:
+To update gems after changing `./webapp/Gemfile` content, simply restart application by running:
 
 ```sh
 # if the app is running in background (e.g. docker-compose up -d app):

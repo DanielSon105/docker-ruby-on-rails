@@ -3,7 +3,7 @@ version: '2'
 services:
 
   app:
-    image: docker-ruby-on-rails-dev:2.3.1 # change 2.3.1 to your ruby version
+    build: .
     ports:
       # puma
       - 9292:9292
