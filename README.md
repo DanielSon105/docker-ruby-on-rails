@@ -23,7 +23,7 @@
   ./bootstrap.sh build dev
   ```
 
-- Add required gems to `./webapp/Gemfile` if desired.
+- Add required gems to `./webapp/Gemfile` if desired (like `gem 'puma'` to work with default cmd).
 
 - Generate `Gemfile.lock` (required to build Docker image):
 
