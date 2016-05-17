@@ -14,7 +14,7 @@
   ./bootstrap.sh
   ```
 
-- Add required gems to `./webapp/Gemfile` if desired (like `gem 'puma'` to work with default cmd).
+- Add required gems to `./webapp/Gemfile` if desired (like `gem 'puma'` to work with default command).
 
 - Build and start application inside docker using docker-compose (on the first launch it will install all the gems into a shared folder, so it might take a while):
 
