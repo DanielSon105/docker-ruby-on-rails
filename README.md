@@ -94,23 +94,23 @@ docker-compose up app
 
     ```yaml
     default: &default
-     adapter: postgresql
-     pool: 5
-     timeout: 5000
-     host: <%= ENV['DB_HOST'] || 'localhost' %>
-     port: <%= ENV['DB_PORT'] || '5432' %>
-     database: <%= ENV['DB_NAME'] %>
-     username: <%= ENV['DB_USER'] %>
-     password: <%= ENV['DB_PASSWORD'] %>
+      adapter: postgresql
+      pool: 5
+      timeout: 5000
+      host: <%= ENV['DB_HOST'] || 'localhost' %>
+      port: <%= ENV['DB_PORT'] || '5432' %>
+      database: <%= ENV['DB_NAME'] %>
+      username: <%= ENV['DB_USER'] %>
+      password: <%= ENV['DB_PASSWORD'] %>
 
     development:
-     <<: *default
+      <<: *default
 
     test:
-     <<: *default
+      <<: *default
 
     production:
-     <<: *default
+      <<: *default
     ```
 
   6. Update the gems by restarting application (see **Updating gems** section), you now should be connected to `postgresql` database from within your application.
