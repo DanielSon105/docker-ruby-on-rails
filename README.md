@@ -21,10 +21,10 @@
       docker-machine restart
       # create another machine
       docker-machine create \
-      --driver virtualbox \
-      --virtualbox-cpu-count 2 \
-      --virtualbox-memory 2048 \
-      new-machine
+        --driver virtualbox \
+        --virtualbox-cpu-count 2 \
+        --virtualbox-memory 2048 \
+        new-machine
       ```
 
 - Linux:
