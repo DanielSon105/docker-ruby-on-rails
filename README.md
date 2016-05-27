@@ -90,8 +90,6 @@ docker-compose up app
     # gem 'sqlite3'
     ```
 
-  4. Update the gems by restarting application (see **Updating gems** section).
-
   5. Edit `./webapp/config/database.yml` file (the key idea behind this is to use variables, defined in `docker-compose.yml` file to set up a connection):
 
     ```yaml
@@ -115,7 +113,7 @@ docker-compose up app
      <<: *default
     ```
 
-  6. Restart an application, you now should be connected to `postgresql` databse from within your application.
+  6. Update the gems by restarting application (see **Updating gems** section), you now should be connected to `postgresql` database from within your application.
 
   7. Don't forget to stop the application and database after you finish:
 
