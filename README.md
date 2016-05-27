@@ -1,5 +1,37 @@
 # Simple Ruby on Rails on Docker
 
+## Requirements
+
+- Windows / Mac:
+
+  - [Docker Toolbox]()
+
+    - Some useful `docker-machine` commands to get started (assuming you are using `default` machine, otherwise add machine name at the end):
+
+      ```sh
+      # list machines:
+      docker-machine ls
+      # apply docker-machine configuration  (connect to docker server):
+      eval $(docker-machine env)
+      # get machine ip (to access rails site, database, etc.):
+      docker-machine ip
+      # start, stop or restart machine
+      docker-machine start
+      docker-machine stop
+      docker-machine restart
+      # create another machine
+      docker-machine create \
+      --driver virtualbox \
+      --virtualbox-cpu-count 2 \
+      --virtualbox-memory 2048 \
+      new-machine
+      ```
+
+- Linux:
+
+  - [Docker Engine]()
+  - [Docker Compose]()
+
 ## Installation
 
 - Change application name (`webapp` by default), Ruby and Rails versions in `./bootstrap.sh` if needed, also change it in the following file:
