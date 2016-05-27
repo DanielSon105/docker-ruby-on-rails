@@ -11,7 +11,8 @@
       ```sh
       # list machines:
       docker-machine ls
-      # apply docker-machine configuration  (connect to docker server):
+      # apply docker-machine configuration  (connect to docker server),
+      # this command needs to be executed in every terminal window (session):
       eval $(docker-machine env)
       # get machine ip (to access rails site, database, etc.):
       docker-machine ip
