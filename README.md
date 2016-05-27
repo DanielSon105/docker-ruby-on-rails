@@ -71,3 +71,54 @@ docker-compose restart app
 # if the app is running in foreground, then CTR+C and start it again:
 docker-compose up app
 ```
+
+## Enabling database
+
+- PostgreSQL:
+
+  1. Uncomment the `db` service inside `docker-compose.yml` file and the `DB_*` environment variables of `app` service.
+  2. Stat the database and keep it running in the background:
+
+    ```sh
+    docker-compose up -d db
+    ```
+
+  3. Add `pg` gem into `./webapp/Gemfile` and remove the `sqlite3` gem:
+
+    ```ruby
+    gem 'pg', '0.18.4'
+    # gem 'sqlite3'
+    ```
+
+  4. Update the gems by restarting application (see **Updating gems** section).
+
+  5. Edit `./webapp/config/database.yml` file (the key idea behind this is to use variables, defined in `docker-compose.yml` file to set up a connection):
+
+    ```yaml
+    default: &default
+     adapter: postgresql
+     pool: 5
+     timeout: 5000
+     host: <%= ENV['DB_HOST'] || 'localhost' %>
+     port: <%= ENV['DB_PORT'] || '5432' %>
+     database: <%= ENV['DB_NAME'] %>
+     username: <%= ENV['DB_USER'] %>
+     password: <%= ENV['DB_PASSWORD'] %>
+
+    development:
+     <<: *default
+
+    test:
+     <<: *default
+
+    production:
+     <<: *default
+    ```
+
+  6. Restart an application, you now should be connected to `postgresql` databse from within your application.
+
+  7. Don't forget to stop the application and database after you finish:
+
+    ```sh
+    docker-compose stop
+    ```

@@ -16,6 +16,11 @@ services:
       - ./.bundle:/usr/local/bundle
     environment:
       RAILS_ENV: development
+      # DB_HOST: db
+      # DB_PORT: '5432'
+      # DB_NAME: test_db
+      # DB_USER: test_user
+      # DB_PASSWORD: test_password
 
   # comment out if you are planning to use database:
   # db:
