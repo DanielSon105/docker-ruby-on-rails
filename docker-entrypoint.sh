@@ -21,7 +21,7 @@ fi
 
 # environment specific configuration
 case $RAILS_ENV in
-  development )
+  development|test )
     check_user_for .
     bundle config --global frozen 0
     bundle check || bundle install
