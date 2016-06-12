@@ -1,11 +1,12 @@
 #  base image
-FROM ruby:2.3.1
+FROM ruby:2.3
 
 # set up required group, user and directories
 ENV APP_DIR '/usr/src/app'
 RUN set -ex \
     && groupadd --gid 118 --system worker \
-    && useradd --uid 118 --gid 118 --shell /bin/false --home-dir /nonexistent --system worker \
+    && useradd --uid 118 --gid 118 --shell /bin/false \
+        --home-dir /nonexistent --system worker \
     && mkdir --parents "$APP_DIR" \
     && chown --recursive worker:worker "$APP_DIR"
 WORKDIR "$APP_DIR"
@@ -23,11 +24,12 @@ RUN set -ex \
 # install gosu
 ENV GOSU_VERSION '1.9'
 ENV GOSU_GPG_KEY 'B42F6819007F00F88E364FD4036A9C25BF357DD4'
+ENV GOSU_URL 'https://github.com/tianon/gosu/releases/download'
 RUN set -ex \
     && wget -O /usr/local/bin/gosu \
-        "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
+        "$GOSU_URL/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
     && wget -O /usr/local/bin/gosu.asc \
-        "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
+        "$GOSU_URL/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GOSU_GPG_KEY" \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
@@ -39,6 +41,6 @@ RUN set -ex \
 EXPOSE 9292
 
 # entrypoint / default command
-COPY docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["puma", "-b", "tcp://0.0.0.0:9292", "--log-requests"]

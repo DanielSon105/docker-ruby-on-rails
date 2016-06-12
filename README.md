@@ -6,7 +6,7 @@
 
   - [Docker Toolbox](https://www.docker.com/products/docker-toolbox)
 
-    - Some useful `docker-machine` commands to get started (assuming you are using `default` machine, otherwise add machine name at the end):
+    - Some useful `docker-machine` commands to get started (assuming you are using `default` machine, otherwise add machine name at the end of each `docker-machine` command):
 
       ```sh
       # list machines:
@@ -39,7 +39,7 @@
 
   - **Dockerfile**: [line 2](Dockerfile#L2) for Ruby version.
   - **Dockerfile.prod**: [lines 5, 6](Dockerfile.prod#L5-L6), and [line 12](Dockerfile.prod#L12) for application name.
-  - **docker-compose.yml**: [line 14](docker-compose.yml#L14) for application name.
+  - **docker-compose.yml**: [line 11](docker-compose.yml#L11) for application name.
 
 - Bootstrap an application:
 
@@ -58,7 +58,7 @@
 - When ready to be shipped, build a production image (this will install all the gems and copy your application into the image):
 
   ```sh
-  docker build --tag "repo/name:veresion" --file Dockerfile.prod .
+  docker build --tag "repo/name:tag" --file Dockerfile.prod .
   ```
 
 ## Updating gems
@@ -72,12 +72,11 @@ docker-compose restart app
 docker-compose up app
 ```
 
-## Enabling database
+## Connecting to database
 
 - PostgreSQL:
 
-  1. Uncomment the `db` service inside `docker-compose.yml` file and the `DB_*` environment variables of `app` service.
-  2. Stat the database and keep it running in the background:
+  1. Stat the database and keep it running in the background:
 
     ```sh
     docker-compose up -d db
@@ -90,33 +89,36 @@ docker-compose up app
     # gem 'sqlite3'
     ```
 
-  5. Edit `./webapp/config/database.yml` file (the key idea behind this is to use variables, defined in `docker-compose.yml` file to set up a connection):
+  4. Edit `./webapp/config/database.yml` file (the key idea behind this is to use variables, defined in `docker-compose.yml` file to set up a connection):
 
     ```yaml
     default: &default
-      adapter: postgresql
-      pool: 5
-      timeout: 5000
-      host: <%= ENV['DB_HOST'] || 'localhost' %>
-      port: <%= ENV['DB_PORT'] || '5432' %>
-      database: <%= ENV['DB_NAME'] %>
-      username: <%= ENV['DB_USER'] %>
-      password: <%= ENV['DB_PASSWORD'] %>
-
-    development:
-      <<: *default
+       adapter: postgresql
+       pool: 5
+       timeout: 5000
+       host: <%= ENV['DB_HOST'] || 'localhost' %>
+       port: <%= ENV['DB_PORT'] || '5432' %>
+       database: <%= ENV['DB_NAME'] || 'rails_db' %>
+       username: <%= ENV['DB_USER'] %>
+       password: <%= ENV['DB_PASSWORD'] %>
 
     test:
-      <<: *default
+       <<: *default
+       database: <%= ENV['DB_TEST_NAME'] || 'rails_test_db' %> # use separate db for tests
+
+    development:
+       <<: *default
 
     production:
-      <<: *default
+       <<: *default
     ```
 
-  6. Update the gems by restarting application (see **Updating gems** section), you now should be connected to `postgresql` database from within your application.
+  5. Update the gems by restarting application (see **Updating gems** section), you now should be connected to `postgresql` database from within your application.
 
-  7. Don't forget to stop the application and database after you finish:
+  6. Don't forget to stop the application and database after you finish:
 
     ```sh
     docker-compose stop
+    # to completely remove all containers, volumes and images:
+    docker-compose down --rmi local
     ```

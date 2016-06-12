@@ -1,36 +1,37 @@
 version: '2'
 
 services:
-
   app:
     build: .
     ports:
-      # puma
-      - 9292:9292
-      # rails server
-      - 3000:3000
+      - 9292:9292 # puma's port
     volumes:
-      # application source code:
-      - ./webapp:/usr/src/app
-      # bundle cache:
-      - ./.bundle:/usr/local/bundle
+      - ./webapp:/usr/src/app # application source code
+      - bundle_cache:/usr/local/bundle # bundle cache
     environment:
       RAILS_ENV: development
-      # DB_HOST: db
-      # DB_PORT: '5432'
-      # DB_NAME: test_db
-      # DB_USER: test_user
-      # DB_PASSWORD: test_password
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: test_db
+      DB_TEST_NAME: test_db_test # separate test database
+      DB_USER: test_user
+      DB_PASSWORD: test_password
 
-  # comment out if you are planning to use database:
-  # db:
-  #   image: postgres:9.5.2
-  #   volumes:
-  #     - ./.db:/var/lib/postgresql
-  #     - ./.db-init:/docker-entrypoint-initdb.d
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     POSTGRES_DB: test_db
-  #     POSTGRES_USER: test_user
-  #     POSTGRES_PASSWORD: test_password
+  db:
+    image: postgres:9.5
+    volumes:
+      - db_data:/var/lib/postgresql:rw
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_TEST_DB: test_db_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+
+volumes:
+  db_data:
+    driver: local
+
+  bundle_cache:
+    driver: local

@@ -13,6 +13,13 @@ check_user_for() {
   fi
 }
 
+local_init() {
+  set -x
+  check_user_for .
+  bundle config --global frozen 0
+  bundle check || bundle install
+}
+
 # check if rails_env variable is set, otherwise use development
 if [ -z "$RAILS_ENV" ]; then
   printf "Warning!\n  Variable RAILS_ENV is not set!\n  Using: development\n"
@@ -21,10 +28,17 @@ fi
 
 # environment specific configuration
 case $RAILS_ENV in
-  development|test )
-    check_user_for .
-    bundle config --global frozen 0
-    bundle check || bundle install
+  development )
+    local_init
+    ;;
+  test )
+    local_init
+    rake db:create db:schema:load --trace
+    ;;
+  staging|production ) ;;
+  * )
+    printf 'Unknown value for RAILS_ENV variable: %s' "${RAILS_ENV:-<none>}"
+    exit 1
     ;;
 esac
 
