@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 check_user_for() {
   owner_user=$(stat -c %u "$1")
@@ -14,7 +15,6 @@ check_user_for() {
 }
 
 local_init() {
-  set -x
   check_user_for .
   bundle config --global frozen 0
   bundle check || bundle install
