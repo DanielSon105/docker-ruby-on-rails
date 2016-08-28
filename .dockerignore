@@ -1,9 +1,0 @@
-.bundle
-.db
-.db-init
-.git
-aREADME.md
-bootstrap.sh
-docker-compose.yml
-Dockerfile
-prod.Dockerfile

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
+set -e
 
 # configuration:
-rails_version='4.2.6'
-app_name='webapp'
+app_name='app'
 
 # should fix osx files ownership (?)
 case $OSTYPE in
@@ -20,11 +20,13 @@ case $OSTYPE in
     ;;
 esac
 
-docker run \
+docker build --tag rails-skeleton:4.2.7.1 .
+exec docker run \
   -it \
   --rm \
   --user "$user_id:$group_id" \
   --volume "$PWD":/usr/src/app \
+  -e INIT_APP=1 \
   -w /usr/src/app \
-  rails:$rails_version \
+  rails-skeleton:4.2.7.1 \
     rails new --skip-bundle $app_name

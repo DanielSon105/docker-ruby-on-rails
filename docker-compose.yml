@@ -6,8 +6,8 @@ services:
     ports:
       - 9292:9292 # puma's port
     volumes:
-      - ./webapp:/usr/src/app # application source code
-      - bundle_cache:/usr/local/bundle # bundle cache
+      - ./app:/usr/src/app # application source code
+      - bundle:/usr/local/bundle # bundle cache
     environment:
       RAILS_ENV: development
       DB_HOST: db
@@ -20,7 +20,7 @@ services:
   db:
     image: postgres:9.5
     volumes:
-      - db_data:/var/lib/postgresql:rw
+      - db:/var/lib/postgresql:rw
     ports:
       - 5432:5432
     environment:
@@ -30,8 +30,7 @@ services:
       POSTGRES_PASSWORD: test_password
 
 volumes:
-  db_data:
+  db:
     driver: local
-
-  bundle_cache:
+  bundle:
     driver: local

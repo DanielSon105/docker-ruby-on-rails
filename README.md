@@ -1,32 +1,10 @@
-# Simple Ruby on Rails on Docker
+# Simple Ruby on Rails on Docker (with PostgreSQL)
 
 ## Requirements
 
 - Windows / Mac:
 
   - [Docker Toolbox](https://www.docker.com/products/docker-toolbox)
-
-    - Some useful `docker-machine` commands to get started (assuming you are using `default` machine, otherwise add machine name at the end of each `docker-machine` command):
-
-      ```sh
-      # list machines:
-      docker-machine ls
-      # apply docker-machine configuration  (connect to docker server),
-      # this command needs to be executed in every terminal window (session):
-      eval $(docker-machine env)
-      # get machine ip (to access rails site, database, etc.):
-      docker-machine ip
-      # start, stop or restart machine
-      docker-machine start
-      docker-machine stop
-      docker-machine restart
-      # create another machine
-      docker-machine create \
-        --driver virtualbox \
-        --virtualbox-cpu-count 2 \
-        --virtualbox-memory 2048 \
-        new-machine
-      ```
 
 - Linux:
 
@@ -35,27 +13,27 @@
 
 ## Installation
 
-- Change application name (`webapp` by default), Ruby and Rails versions in `./bootstrap.sh` if needed, also change it in the following file:
-
-  - **Dockerfile**: [line 2](Dockerfile#L2) for Ruby version.
-  - **Dockerfile.prod**: [lines 5, 6](Dockerfile.prod#L5-L6), and [line 12](Dockerfile.prod#L12) for application name.
-  - **docker-compose.yml**: [line 11](docker-compose.yml#L11) for application name.
-
-- Bootstrap an application:
+- Bootstrap an application (this will build a `rails-skeleton:4.2.7.1` image and initialize empty Ruby on Rails application):
 
   ```sh
   ./bootstrap.sh
   ```
 
-- Add required gems to `./webapp/Gemfile` if desired (like `gem 'puma', '3.4.0'` to work with default command).
+- Add `puma` gem to `./app/Gemfile`:
 
-- Build and start application inside docker using docker-compose (on the first launch it will install all the gems into a shared folder, so it might take a while):
+  ```rb
+  gem 'puma', '3.6.0'
+  ```
+
+- Add any other gems to `./app/Gemfile` if desired.
+
+- Build and start application inside docker using `docker-compose` (on the first launch all the gems will be installed, so it might take a while, they will be cached for development environment):
 
   ```sh
   docker-compose up --build app
   ```
 
-- When ready to be shipped, build a production image (this will install all the gems and copy your application into the image):
+- When ready to be shipped, build a production image (this will install all the gems and copy your application into the image itself):
 
   ```sh
   docker build --tag "repo/name:tag" --file Dockerfile.prod .
@@ -63,7 +41,7 @@
 
 ## Updating gems
 
-To update gems after changing `./webapp/Gemfile` content, simply restart application by running:
+To update gems after changing `./app/Gemfile` content, simply restart application by executing:
 
 ```sh
 # if the app is running in background (e.g. docker-compose up -d app):
@@ -72,53 +50,51 @@ docker-compose restart app
 docker-compose up app
 ```
 
-## Connecting to database
+## Adding PostgreSQL database
 
-- PostgreSQL:
+- Stat the database and keep it running in the background:
 
-  1. Stat the database and keep it running in the background:
+  ```sh
+  docker-compose up -d db
+  ```
 
-    ```sh
-    docker-compose up -d db
-    ```
+- Add `pg` gem into `./app/Gemfile` and remove the `sqlite3` gem:
 
-  3. Add `pg` gem into `./webapp/Gemfile` and remove the `sqlite3` gem:
+  ```ruby
+  gem 'pg', '0.18.4'
+  # gem 'sqlite3'
+  ```
 
-    ```ruby
-    gem 'pg', '0.18.4'
-    # gem 'sqlite3'
-    ```
+- Edit `./app/config/database.yml` file (the key idea behind this is to use variables defined in `docker-compose.yml` file to set up a connection):
 
-  4. Edit `./webapp/config/database.yml` file (the key idea behind this is to use variables, defined in `docker-compose.yml` file to set up a connection):
+  ```yaml
+  default: &default
+   adapter: postgresql
+   pool: 5
+   timeout: 5000
+   host: <%= ENV['DB_HOST'] || 'localhost' %>
+   port: <%= ENV['DB_PORT'] || '5432' %>
+   database: <%= ENV['DB_NAME'] || 'rails_db' %>
+   username: <%= ENV['DB_USER'] %>
+   password: <%= ENV['DB_PASSWORD'] %>
 
-    ```yaml
-    default: &default
-       adapter: postgresql
-       pool: 5
-       timeout: 5000
-       host: <%= ENV['DB_HOST'] || 'localhost' %>
-       port: <%= ENV['DB_PORT'] || '5432' %>
-       database: <%= ENV['DB_NAME'] || 'rails_db' %>
-       username: <%= ENV['DB_USER'] %>
-       password: <%= ENV['DB_PASSWORD'] %>
+  test:
+   <<: *default
+   database: <%= ENV['DB_TEST_NAME'] || 'rails_test_db' %> # use separate db for tests
 
-    test:
-       <<: *default
-       database: <%= ENV['DB_TEST_NAME'] || 'rails_test_db' %> # use separate db for tests
+  development:
+   <<: *default
 
-    development:
-       <<: *default
+  production:
+   <<: *default
+  ```
 
-    production:
-       <<: *default
-    ```
+- Update the gems by restarting application (see **Updating gems** section), you now should be connected to `postgresql` database from within your application.
 
-  5. Update the gems by restarting application (see **Updating gems** section), you now should be connected to `postgresql` database from within your application.
+- Don't forget to stop the application and database after you finish:
 
-  6. Don't forget to stop the application and database after you finish:
-
-    ```sh
-    docker-compose stop
-    # to completely remove all containers, volumes and images:
-    docker-compose down --rmi local
-    ```
+  ```sh
+  docker-compose stop
+  # to completely remove all containers, volumes and images:
+  docker-compose down --rmi local
+  ```

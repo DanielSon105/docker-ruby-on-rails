@@ -1,43 +1,37 @@
 #!/usr/bin/env bash
-set -e
-
-check_user_for() {
-  owner_user=$(stat -c %u "$1")
-  owner_group=$(stat -c %g "$1")
-  worker_user=$(id -u worker)
-  worker_group=$(id -g worker)
-  if [ "$owner_user" -ne "$worker_user" -o "$owner_group" -ne "$worker_group" ]; then
-    deluser 'worker'
-    groupadd --gid "$owner_group" --system worker
-    useradd --uid "$owner_user" --gid "$owner_group" --shell /bin/false \
-      --home-dir /nonexistent --system worker
-  fi
-}
+set -ex
 
 local_init() {
-  check_user_for .
+  target_gid=$(stat -c "%g" .)
+  if [ "$(grep "$target_gid" -c /etc/group)" -eq "0" ]; then
+    groupadd -g "$target_gid" localworker
+    usermod -a -G localworker worker
+  else
+    group=$(getent group "$target_gid" | cut -d: -f1)
+    usermod -a -G "$group" worker
+  fi
   bundle config --global frozen 0
   bundle check || bundle install
 }
 
-# check if rails_env variable is set, otherwise use development
-if [ -z "$RAILS_ENV" ]; then
-  printf "Warning!\n  Variable RAILS_ENV is not set!\n  Using: development\n"
-  export RAILS_ENV='development'
-fi
+# init a new application and exit
+[ -n "$INIT_APP" ] && rails new --skip-bundle app && exit $?
 
 # environment specific configuration
 case $RAILS_ENV in
   development )
+    set -x
     local_init
     ;;
   test )
     local_init
     rake db:create db:schema:load --trace
     ;;
-  staging|production ) ;;
+  staging|production )
+    ;;
   * )
     printf 'Unknown value for RAILS_ENV variable: %s' "${RAILS_ENV:-<none>}"
+    printf "Possible values are: development|test|staging|production"
     exit 1
     ;;
 esac
@@ -48,10 +42,9 @@ case $1 in
     rake db:migrate --trace
     rake assets:precompile --trace
     ;;
-  bundle )
+  * )
     exec "$@"
     ;;
 esac
 
-chown -R worker:worker .
 exec gosu worker "$@"
