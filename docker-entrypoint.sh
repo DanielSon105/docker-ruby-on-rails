@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
 local_init() {
   target_gid=$(stat -c "%g" .)
@@ -15,7 +15,11 @@ local_init() {
 }
 
 # init a new application and exit
-[ -n "$INIT_APP" ] && rails new --skip-bundle app && exit $?
+if [ -n "$INIT_APP" ]; then
+  rails new --skip-bundle app
+  printf 'Empty Ruby on Rails application initialized.\n'
+  exit 0
+fi
 
 # environment specific configuration
 case $RAILS_ENV in
@@ -30,8 +34,8 @@ case $RAILS_ENV in
   staging|production )
     ;;
   * )
-    printf 'Unknown value for RAILS_ENV variable: %s' "${RAILS_ENV:-<none>}"
-    printf "Possible values are: development|test|staging|production"
+    printf 'Unknown value for RAILS_ENV variable: %s\n' "${RAILS_ENV:-<none>}"
+    printf "Possible values are:\n\tdevelopment|test|staging|production\n"
     exit 1
     ;;
 esac
@@ -47,4 +51,5 @@ case $1 in
     ;;
 esac
 
+chown -R worker:worker .
 exec gosu worker "$@"

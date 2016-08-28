@@ -37,6 +37,7 @@
 
   ```sh
   docker build --tag "repo/name:tag" --file Dockerfile.prod .
+  # docker push ...
   ```
 
 ## Updating gems

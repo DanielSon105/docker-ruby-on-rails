@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# configuration:
-app_name='app'
-
 # should fix osx files ownership (?)
 case $OSTYPE in
   linux* )
@@ -28,5 +25,4 @@ exec docker run \
   --volume "$PWD":/usr/src/app \
   -e INIT_APP=1 \
   -w /usr/src/app \
-  rails-skeleton:4.2.7.1 \
-    rails new --skip-bundle $app_name
+  rails-skeleton:4.2.7.1
